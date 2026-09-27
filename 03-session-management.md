@@ -40,16 +40,16 @@ sequenceDiagram
     participant Server
     participant SessionStore as Session Store (Redis/DB)
 
-    Browser->>Server: POST /login {username, password}
+    Browser->>Server: POST /login with username and password
     Server->>Server: Verify credentials
-    Server->>SessionStore: Store session {userId, roles, expiry}
-    SessionStore-->>Server: sessionId = "abc123"
-    Server-->>Browser: Set-Cookie: sessionId=abc123; HttpOnly; Secure
+    Server->>SessionStore: Store session for userId, roles, expiry
+    SessionStore-->>Server: Return sessionId abc123
+    Server-->>Browser: Set-Cookie sessionId=abc123 HttpOnly Secure
 
-    Browser->>Server: GET /dashboard (Cookie: sessionId=abc123)
-    Server->>SessionStore: Lookup sessionId=abc123
-    SessionStore-->>Server: {userId: 42, roles: [admin]}
-    Server-->>Browser: 200 OK + dashboard data
+    Browser->>Server: GET /dashboard with Cookie sessionId=abc123
+    Server->>SessionStore: Lookup sessionId abc123
+    SessionStore-->>Server: Return userId 42 and role admin
+    Server-->>Browser: 200 OK with dashboard data
 ```
 
 ### How It Works
